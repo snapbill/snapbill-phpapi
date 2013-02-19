@@ -14,6 +14,11 @@ abstract class Base {
     $this->depth = 1000;
   }
 
+  function update($data) {
+    $result = $this->post('update', $data);
+    $this->gather($result, true);
+  }
+
   // Gathers fetched data from the API into the object.
   function gather($data, $overwrite=false) {
     if (isset($data['depth'])) {
@@ -43,11 +48,6 @@ abstract class Base {
     $data = $this->post('get');
     $data = $data[$this->class];
     $this->gather($data);
-  }
-
-  function update($data) {
-    $result = $this->post('update', $data);
-    $this->gather($result, true);
   }
 
   private function getField($key) {

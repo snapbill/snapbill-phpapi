@@ -1,23 +1,31 @@
 <?php
 namespace SnapBill;
 
+/**
+ * A Context is the root of all interactions with the SnapBill API.
+ */
 class Context {
 
+  // The Connection to use for posting to the API.
   public $conn;
 
   private $loaders;
   private $cache;
 
+  /**
+   * Creates a new SnapBill Context. See the constructor of Connection for a list of valid options.
+   */
   function __construct($options=array()) {
     $this->conn = is_array($options) ? new Connection($options) : $options;
     $this->loaders = array(new DefaultLoader('\\SnapBill\\Objects'));
     $this->cache = new Cache();
   }
 
-  function addLoader($loader) {
-    array_unshift($this->loaders, $loader);
-  }
-
+  /**
+   * Returns a SnapBill object of a given class. $data may either be an array of class-specific variables,
+   * or an xid, id or code that identifies the object. The object will be cached so that future calls to load
+   * with the same identifier will return the same object.
+   */
   function load($class, $data) {
 
     // Extract id from $data
@@ -45,6 +53,9 @@ class Context {
     return $object;
   }
 
+  /**
+   * Returns an array of objects of a given class that match a search query.
+   */
   function search($class, $search=array()) {
     $phpClass = $this->getPHPClass($class, true);
     $search = $phpClass::buildSearch($search);
@@ -54,9 +65,16 @@ class Context {
     }, $results);
   }
 
+  /**
+   * Adds a new object.
+   */
   function add($class, $data) {
     $result = $this->post("$class/add", $data);
     return $this->load($class, $result);
+  }
+
+  function addLoader($loader) {
+    array_unshift($this->loaders, $loader);
   }
 
   function supportsClass($class) {

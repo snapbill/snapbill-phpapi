@@ -1,8 +1,7 @@
 <?php
 namespace SnapBill;
 
-use \Exception;
-
+/** A Connection is responsible for POSTing to the SnapBill API and decoding the results. */
 class Connection {
 
   static $CURL_OPTIONS = array(
@@ -16,6 +15,21 @@ class Connection {
   protected $username;
   protected $password;
 
+  /**
+   * Creates a new Connection. $options may contain the following fields:
+   *
+   *    host      - The domain name of the SnapBill API. Defaults to api.snapbill.com.
+   *    secure    - Boolean flag indicating whether the connection should use SSL or not. Defaults to true.
+   *    username  - The username to connect with. A password must be provided along with username.
+   *    password  - The password to authenticate with.
+   *
+   * If username and password are not specified, then an attempt will be made to load them from a .snapbill.cfg
+   * file in the user's home directory. Example .snapbill.cfg file:
+   *
+   *    [api]
+   *    username=me
+   *    password=1234
+   */
   function __construct($options=array()) {
 
     $host = 'api.snapbill.com';
@@ -41,6 +55,10 @@ class Connection {
 
   }
 
+  /**
+   * POSTs a request to the API using the given action (which will be added to the URL) and arguments.
+   * Returns the results of the API call, after they have been JSON decoded.
+   */
   function post($action, $args=array()) {
     $curl = $this->initializeCurl($action, $args);
     $result = curl_exec($curl);
