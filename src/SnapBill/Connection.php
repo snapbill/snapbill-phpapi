@@ -22,9 +22,10 @@ class Connection {
    *    secure    - Boolean flag indicating whether the connection should use SSL or not. Defaults to true.
    *    username  - The username to connect with. A password must be provided along with username.
    *    password  - The password to authenticate with.
+   *    config    - Configuration file to load authentication details from if username and password are not specified.
+   *                Defaults to .snapbill.cfg, under the current user's home directory.
    *
-   * If username and password are not specified, then an attempt will be made to load them from a .snapbill.cfg
-   * file in the user's home directory. Example .snapbill.cfg file:
+   * Example .snapbill.cfg file:
    *
    *    [api]
    *    username=me
