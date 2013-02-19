@@ -11,7 +11,7 @@ class User extends SnapBill\Base {
     } else if ($users) {
       return $users[0];
     } else {
-      return null;
+      return NULL;
     }
   }
 

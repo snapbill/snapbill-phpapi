@@ -70,7 +70,7 @@ class Connection {
     curl_close($curl);
 
     $result = json_decode($result, true);
-    if ($result == null) {
+    if ($result == NULL) {
       throw new Exception("Could not JSON-decode result");
     }
     if ($result['code'] != 200) {

@@ -45,7 +45,7 @@ class Context {
       } else {
         $id = $data;
       }
-      $data = null;
+      $data = NULL;
     }
 
     $object = $this->getObject($class, $id);
@@ -78,7 +78,7 @@ class Context {
   }
 
   function supportsClass($class) {
-    return ($this->getPHPClass($class, false) !== null);
+    return ($this->getPHPClass($class, false) !== NULL);
   }
 
   // Loads a cached object or creates and caches a new one.
@@ -105,7 +105,7 @@ class Context {
     }
     if ($raiseException)
       throw new Exception("Unknown SnapBill class: $class");
-    return null;
+    return NULL;
   }
 
 }

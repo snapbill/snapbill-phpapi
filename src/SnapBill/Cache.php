@@ -21,7 +21,7 @@ class Cache {
 
   function get($class, $id) {
     $class =& $this->getClass($class);
-    return isset($class[$id]) ? $class[$id] : null;
+    return isset($class[$id]) ? $class[$id] : NULL;
   }
 
   function store($class, $id, $object) {

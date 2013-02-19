@@ -61,16 +61,16 @@ abstract class Base {
         return $this->data[$key];
       }
     }
-    return null;
+    return NULL;
   }
 
   function __isset($key) {
-    return ($this->getField($key) !== null);
+    return ($this->getField($key) !== NULL);
   }
 
   function __get($key) {
     $value = $this->getField($key);
-    if ($value !== null) return $value;
+    if ($value !== NULL) return $value;
     throw new Exception("Unknown variable '$key' for SnapBill ".$this->class." object");
   }
 
