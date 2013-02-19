@@ -44,12 +44,10 @@ abstract class Base {
     }
   }
 
-  // Fetches data from the API and gather()s it.
+  // Fetches data from the API and gathers it.
   function fetch() {
     assert($this->depth > 0);
     $data = $this->post('get');
-    var_dump($data);
-    $data = $data[$this->class];
     $this->gather($data);
   }
 

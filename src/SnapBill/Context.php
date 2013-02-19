@@ -54,15 +54,6 @@ class Context {
   }
 
   /**
-   * Autoloads an object given API result data.
-   */
-  function autoload($apiData) {
-    $class = $apiData['class'];
-    $data = $apiData[$class];
-    return $this->load($class, $data);
-  }
-
-  /**
    * Returns an array of objects of a given class that match a search query.
    */
   function search($class, $search=array()) {

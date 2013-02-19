@@ -68,12 +68,18 @@ class Connection {
       throw new Exception($error);
     }
     curl_close($curl);
+
     $result = json_decode($result, true);
     if ($result == null) {
       throw new Exception("Could not JSON-decode result");
     }
     if ($result['code'] != 200) {
       throw new Exception("Received code ".$result['code']." from SnapBill");
+    }
+
+    if (isset($result['class'])) {
+      $class = $result['class'];
+      $result = $result[$class];
     }
     return $result;
   }
