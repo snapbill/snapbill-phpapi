@@ -5,17 +5,17 @@ class Context {
 
   public $conn;
 
-  private $factories;
+  private $loaders;
   private $cache;
 
   function __construct($options=array()) {
     $this->conn = is_array($options) ? new Connection($options) : $options;
-    $this->factories = array(new DefaultFactory());
+    $this->loaders = array(new DefaultLoader('\\SnapBill\\Objects'));
     $this->cache = new Cache();
   }
 
-  function addFactory($factory) {
-    array_unshift($this->factories, $factory);
+  function addLoader($loader) {
+    array_unshift($this->loaders, $loader);
   }
 
   function load($class, $data) {
@@ -46,8 +46,8 @@ class Context {
   }
 
   function search($class, $search=array()) {
-    $factory = $this->getFactory($class, true);
-    $search = $factory->callStatic($class, 'buildSearch', array($search));
+    $phpClass = $this->getPHPClass($class, true);
+    $search = $phpClass::buildSearch($search);
     $results = $this->conn->post("$class/list", $search)['list'];
     return array_map(function($data) use ($class) {
       return $this->load($class, $data);
@@ -60,7 +60,7 @@ class Context {
   }
 
   function supportsClass($class) {
-    return ($this->getFactory($class, false) !== null);
+    return ($this->getPHPClass($class, false) !== null);
   }
 
   // Loads a cached object or creates and caches a new one.
@@ -75,16 +75,16 @@ class Context {
 
   // Instantiates a new object without checking the cache.
   private function createNew($class) {
-    $factory = $this->getFactory($class, true);
-    $object = $factory->create($class);
+    $phpClass = $this->getPHPClass($class, true);
+    $object = new $phpClass();
     $object->init($class, $this);
     return $object;
   }
 
-  private function getFactory($class, $raiseException) {
-    foreach ($this->factories as $factory) {
-      if ($factory->supportsClass($class))
-        return $factory;
+  private function getPHPClass($class, $raiseException) {
+    foreach ($this->loaders as $loader) {
+      $phpClass = $loader->phpName($class);
+      if (class_exists($phpClass)) return $phpClass;
     }
     if ($raiseException)
       throw new Exception("Unknown SnapBill class: $class");
