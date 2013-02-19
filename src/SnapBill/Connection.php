@@ -121,11 +121,11 @@ class Connection {
     if (is_array($v)) {
       // Flatten array parameters
       $elems = array_map(function($elem) use ($k) {
-        return urlencode($k).'[]='.urlencode($elem);
+        return urlencode($k).'[]='.urlencode((string)$elem);
       }, $v);
       return implode('&', $elems);
     } else {
-      return urlencode($k).'='.urlencode($v);
+      return urlencode($k).'='.urlencode((string)$v);
     }
   }
 

@@ -54,6 +54,15 @@ class Context {
   }
 
   /**
+   * Autoloads an object given API result data.
+   */
+  function autoload($apiData) {
+    $class = $apiData['class'];
+    $data = $apiData[$class];
+    return $this->load($class, $data);
+  }
+
+  /**
    * Returns an array of objects of a given class that match a search query.
    */
   function search($class, $search=array()) {
@@ -69,7 +78,7 @@ class Context {
    * Adds a new object.
    */
   function add($class, $data) {
-    $result = $this->post("$class/add", $data);
+    $result = $this->conn->post("$class/add", $data);
     return $this->load($class, $result);
   }
 
@@ -85,17 +94,16 @@ class Context {
   private function getObject($class, $id) {
     $obj = $this->cache->get($class, $id);
     if (!$obj) {
-      $obj = $this->createNew($class);
+      $obj = $this->createNew($class, $id);
       $this->cache->store($class, $id, $obj);
     }
     return $obj;
   }
 
   // Instantiates a new object without checking the cache.
-  private function createNew($class) {
+  private function createNew($class, $id) {
     $phpClass = $this->getPHPClass($class, true);
-    $object = new $phpClass();
-    $object->init($class, $this);
+    $object = new $phpClass($id, $class, $this);
     return $object;
   }
 

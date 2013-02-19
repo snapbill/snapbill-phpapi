@@ -3,12 +3,14 @@ namespace SnapBill;
 
 abstract class Base {
 
+  protected $identity;
   protected $class;
   protected $context;
   protected $depth;
   protected $data = array();
 
-  function init($class, $context) {
+  function __construct($identity, $class, $context) {
+    $this->identity = $identity;
     $this->class = $class;
     $this->context = $context;
     $this->depth = 1000;
@@ -46,6 +48,7 @@ abstract class Base {
   function fetch() {
     assert($this->depth > 0);
     $data = $this->post('get');
+    var_dump($data);
     $data = $data[$this->class];
     $this->gather($data);
   }
@@ -90,16 +93,7 @@ abstract class Base {
   }
 
   protected function post($action, $args=array()) {
-    if (isset($this->xid)) {
-      $id = $this->xid;
-    } else if (isset($this->id)) {
-      $id = $this->id;
-    } else if (isset($this->code)) {
-      $id = $this->code;
-    } else {
-      throw new Exception("Could not find id for ".$this->class." object");
-    }
-    $action = $this->class.'/'.$id.'/'.$action;
+    $action = $this->class.'/'.$this->identity.'/'.$action;
     return $this->context->conn->post($action, $args);
   }
 
