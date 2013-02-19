@@ -1,0 +1,27 @@
+{
+  "name": "snapbill/snapbill-phpapi",
+  "description": "PHP client library for SnapBill API",
+  "version": "1.0.0",
+  "keywords": ["snapbill", "api"],
+  "authors": [
+    {
+      "name": "Vaughan Newton",
+      "email": "vaughan@snapbill.com",
+      "role": "Developer"
+    },
+    {
+      "name": "Josh Yudaken",
+      "email": "josh@snapbill.com",
+      "role": "CEO/Developer"
+    }
+  ],
+  "support": {
+    "email": "support@snapbill.com",
+    "issues": "https://snapbill.zendesk.com/anonymous_requests/new"
+  },
+  "autoload": {
+    "psr-0": {
+      "SnapBill": "src/"
+    }
+  }
+}
