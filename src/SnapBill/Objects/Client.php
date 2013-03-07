@@ -6,12 +6,12 @@ class Client extends SnapBill\Base {
 
   function addUser($data) {
     $result = $this->post('add_user', $data);
-    return $this->context->load('user', $result);
+    return $this->connection->load('user', $result);
   }
 
   function addService($data) {
     $result = $this->post('add_service', $data);
-    return $this->context->load('service', $result);
+    return $this->connection->load('service', $result);
   }
 
   function addInvoice($data, $lines) {
@@ -22,7 +22,7 @@ class Client extends SnapBill\Base {
       }
     }
     $result = $this->post('add_invoice', $data);
-    return $this->context->load('invoice', $result);
+    return $this->connection->load('invoice', $result);
   }
 
   function setPayment($data) {
@@ -31,14 +31,14 @@ class Client extends SnapBill\Base {
 
   function lostPassword() {
     $result = $this->post('lost_password');
-    return $this->context->load('email', $result);
+    return $this->connection->load('email', $result);
   }
 
   protected function wrapWithObjects($data) {
     if (isset($data['services'])) {
       $services = array();
       foreach ($data['services'] as $id => $service_data) {
-        $services[$id] = $this->context->load('service', $service_data);
+        $services[$id] = $this->connection->load('service', $service_data);
       }
       $data['services'] = $services;
     }

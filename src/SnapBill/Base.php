@@ -5,14 +5,14 @@ abstract class Base {
 
   protected $identity;
   protected $class;
-  protected $context;
+  protected $connection;
   protected $depth;
   protected $data = array();
 
-  function __construct($identity, $class, $context) {
+  function __construct($identity, $class, $connection) {
     $this->identity = $identity;
     $this->class = $class;
-    $this->context = $context;
+    $this->connection = $connection;
     $this->depth = 1000;
   }
 
@@ -78,8 +78,8 @@ abstract class Base {
     $unwrapped = $this->unwrappedFields();
     foreach ($data as $field => $value) {
       // Check if $field is a SnapBill class
-      if (!in_array($field, $unwrapped) && $this->context->supportsClass($field)) {
-        $object = $this->context->load($field, $value);
+      if (!in_array($field, $unwrapped) && $this->connection->supportsClass($field)) {
+        $object = $this->connection->load($field, $value);
         $data[$field] = $object;
       }
     }
@@ -92,7 +92,7 @@ abstract class Base {
 
   protected function post($action, $args=array()) {
     $action = $this->class.'/'.$this->identity.'/'.$action;
-    return $this->context->conn->post($action, $args);
+    return $this->connection->http->post($action, $args);
   }
 
   static function buildSearch($search) {
