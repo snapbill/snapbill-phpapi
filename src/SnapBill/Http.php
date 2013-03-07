@@ -78,10 +78,6 @@ class Http {
       throw new Exception("Received code ".$result['code']." from SnapBill");
     }
 
-    if (isset($result['class'])) {
-      $class = $result['class'];
-      $result = $result[$class];
-    }
     return $result;
   }
 

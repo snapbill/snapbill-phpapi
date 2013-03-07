@@ -47,8 +47,14 @@ abstract class Base {
   // Fetches data from the API and gathers it.
   function fetch() {
     assert($this->depth > 0);
-    $data = $this->post('get');
-    $this->gather($data);
+
+    $result = $this->post('get');
+
+    assert($result['type'] === 'item');
+    assert($result['class'] === $this->class);
+    assert(is_array($result[$this->class]));
+
+    $this->gather($result[$this->class]);
   }
 
   private function getField($key) {
